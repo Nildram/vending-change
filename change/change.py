@@ -43,20 +43,13 @@ class Change:
                     print("{:3.0f}".format(col), end=" ")
                 print("\n")
 
-        change = []
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
             dp[coin_index] = dp[coin_index-1].copy() # try and use prev row or temporary, can we just switch between two rows overwiting?
             for target_sum in range(coin, amount + 1):
                 print(coin, coin_count, coin_index, target_sum, target_sum/coin)
-                print("foo---------------")
-                print_dp(dp)
                 if int(target_sum/coin) > coin_count:
-                    print("there")
                     dp[coin_index][target_sum] = coin_count + (dp[coin_index -1][target_sum-coin*coin_count])
                 else:
-                    print("here")
                     dp[coin_index][target_sum] = min(dp[coin_index-1][target_sum], dp[coin_index][target_sum - coin] + 1)
-
-                #print(dp)
                 
         return dp

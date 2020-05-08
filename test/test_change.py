@@ -1,6 +1,6 @@
 import unittest
 
-from change.change import Change
+from change.change import ChangeCalculator
 
 class TestChange(unittest.TestCase):
 
@@ -16,9 +16,11 @@ class TestChange(unittest.TestCase):
     }
 
     non_canonical_float = {
-        1:6,
+
+        
         3:1,
-        #4:10,
+        4:10,
+        1:6,
         #8:10,
         #12:10,
         #13:10,
@@ -26,7 +28,7 @@ class TestChange(unittest.TestCase):
     }
     def setUp(self):
         pass
-        self.change = Change()
+        self.change = ChangeCalculator()
         self.change.initialise(TestChange.default_float)
 
     # def test_change(self):
@@ -48,7 +50,7 @@ class TestChange(unittest.TestCase):
 
 
     def test_change_2(self):
-        self.change = Change()
+        self.change = ChangeCalculator()
         self.change.initialise(TestChange.non_canonical_float)
         # self.assertEqual([], self.change.get_change(0))
         # self.assertEqual([1], self.change.get_change(1))
@@ -56,8 +58,9 @@ class TestChange(unittest.TestCase):
         # self.assertEqual([3], self.change.get_change(3))
         # self.assertEqual([4], self.change.get_change(4))
         # self.assertEqual([4,1], self.change.get_change(5))
-        self.assertEqual([3,3], self.change.get_change(6))
-       # self.assertEqual([4,3], self.change.get_change(7))
+        self.assertEqual({1:2,4:1}, self.change.get_change(6))
+        #self.assertEqual({100:1}, self.change.get_change(100))
+        #self.assertEqual({1:1,100:1}, self.change.get_change(101))
     #     self.assertEqual([4,4], self.change.get_change(8))
     #     self.assertEqual([3,3,3], self.change.get_change(9))
     #     self.assertEqual([10], self.change.get_change(10))

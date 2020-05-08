@@ -64,22 +64,30 @@ class ChangeCalculator:
         def get_valid_change_options(change_options: List[Change]) -> List[Change]:
             return filter(lambda x: x.number_of_coins != 0, change_options)
 
-        def get_most_optimal(change1: Change, change2: Change):
+        def get_most_optimal_change(change1: Change, change2: Change) -> Change:
             return min(get_valid_change_options([change1, change2]))
+
+        def get_change_with_coin_limit(coin, coin_count, dp, target_sum):
+            remainder = target_sum - (coin * coin_count)
+            remainder_using_previous_coin = dp[coin_index -1][remainder]
+            max_change_using_current_coin = Change({coin: coin_count})
+            return max_change_using_current_coin + remainder_using_previous_coin
+
+        def get_change_without_coin_limit(coin, dp, target_sum):
+            return get_most_optimal_change(
+                dp[coin_index][target_sum], 
+                dp[coin_index][target_sum - coin] + Change({coin:1}))
 
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
             dp[coin_index] = dp[coin_index-1].copy()
             for target_sum in range(coin, amount + 1):
                 #print(coin, coin_count, coin_index, target_sum, target_sum/coin)
                 if out_of_current_coins(target_sum, coin, coin_count):
-                    dp[coin_index][target_sum] = Change({coin: coin_count}) + (dp[coin_index -1][target_sum-coin*coin_count])
+                    dp[coin_index][target_sum] = get_change_with_coin_limit(coin, coin_count, dp, target_sum)
                 else:
                     #print(dp[coin_index][target_sum-coin] + Change({1:1}))
-                    
-                    dp[coin_index][target_sum] = \
-                        get_most_optimal(
-                            dp[coin_index][target_sum], 
-                            dp[coin_index][target_sum - coin] + Change({coin:1}))
+                    dp[coin_index][target_sum] = get_change_without_coin_limit(coin, dp, target_sum)
+                        
 
         print_dp(dp)
         return dp[len(self.coins)-1][amount].coins

@@ -29,17 +29,22 @@ class ChangeAlgorithm(ABC):
 
 class GreedyAlgorithm(ChangeAlgorithm):
 
+    def _reset_totals(self):
+        self.change_sum = 0
+        self.change = defaultdict(int)
+
+    def _update_change(self, coin: int, coin_count: int):
+        self.change_sum += coin
+        self.change[coin] += 1
+
     def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
-        # TODO refactor
-        change_sum = 0
-        change = defaultdict(int)
+        self._reset_totals()
         for coin, coin_count in coins.items():             
-            while coin_count and coin <= (amount - change_sum):
-                change[coin] += 1
-                change_sum += coin
+            while coin_count and coin <= (amount - self.change_sum):
+                self._update_change(coin, coin_count)
+                if self.change_sum == amount:
+                    return self.change
                 coin_count -= 1
-                if change_sum == amount: 
-                    return change
         
         return {}
 

@@ -2,17 +2,34 @@ import unittest
 
 from change_calculator.change_algorithm import ChangeAlgorithm
 
-class TestGreedyAlgorithm(unittest.TestCase):
+# class TestGreedyAlgorithm(unittest.TestCase):
 
-    def test_sort(self):
-        algorithm = ChangeAlgorithm.create(canonical_coin_system=True)
-        self.assertEqual({}, algorithm.sort_coins({}))
-        self.assertEqual({1:1}, algorithm.sort_coins({1:1}))
-        self.assertEqual({1:1, 2:1}, algorithm.sort_coins({2:1, 1:1}))
-        self.assertEqual({1:1, 3:1, 2:1}, algorithm.sort_coins({3:1, 2:1, 1:1}))
+#     def test_cases(self):
+#         algorithm = ChangeAlgorithm.create(canonical_coin_system=True)
+
+#         self.assertEqual({}, algorithm.calculate_change({}, 0))
+#         self.assertEqual({}, algorithm.calculate_change({}, 1))
+#         self.assertEqual({}, algorithm.calculate_change({2:1}, 1))
+#         self.assertEqual({}, algorithm.calculate_change({1:1}, 2))
+#         self.assertEqual({1:1}, algorithm.calculate_change({1:1}, 1))
+#         self.assertEqual({1:10}, algorithm.calculate_change({1:10}, 10))
+#         self.assertEqual({2:5}, algorithm.calculate_change({2:5}, 10))
+#         self.assertEqual({2:3, 1:4}, algorithm.calculate_change({2:3, 1:10}, 10))
+#         self.assertEqual({200: 1, 100: 1, 50: 1, 20: 1, 10: 1, 5: 1, 2: 1, 1:1}, algorithm.calculate_change({200:10, 100:10, 50:10, 20:10, 10:10, 5:10, 2:10, 1:10}, 388))
+
+class TestDynamicProgrammingAlgorithm(unittest.TestCase):
+
+    # def generate_combinations(self):
+    #     d = [[1, 1], [0, 0]]
+    #     from itertools import permutations, chain
+    #     from pprint import pprint
+    #     pprint(sorted([i[:2], i[2:]] for i in set(permutations(chain.from_iterable(d)))))
+    #     for f in []:
+
 
     def test_cases(self):
-        algorithm = ChangeAlgorithm.create(canonical_coin_system=True)
+        algorithm = ChangeAlgorithm.create(canonical_coin_system=False)
+
         self.assertEqual({}, algorithm.calculate_change({}, 0))
         self.assertEqual({}, algorithm.calculate_change({}, 1))
         self.assertEqual({}, algorithm.calculate_change({2:1}, 1))
@@ -20,12 +37,13 @@ class TestGreedyAlgorithm(unittest.TestCase):
         self.assertEqual({1:1}, algorithm.calculate_change({1:1}, 1))
         self.assertEqual({1:10}, algorithm.calculate_change({1:10}, 10))
         self.assertEqual({2:5}, algorithm.calculate_change({2:5}, 10))
-        self.assertEqual({2:2, 1:2}, algorithm.calculate_change({2:2, 1:10}, 6))
-        self.assertEqual({200: 1, 100: 1, 50: 1, 20: 1, 10: 1, 5: 1, 2: 1}, algorithm.calculate_change({200:10, 100:10, 50:10, 20:10, 10:10, 5:10, 2:10, 1:10}, 387))             
+        self.assertEqual({2:2, 1:2}, algorithm.calculate_change({1:10, 2:2}, 6))
+        self.assertEqual({1:1, 2:1, 5:1, 10:1, 20:1, 50:1, 100:1, 200:1}, algorithm.calculate_change({1:10, 2:10, 5:10, 10:10, 20:10, 50:10, 100:10, 200:10}, 388))
 
-# class TestDynamicProgrammingAlgorithm(unittest.TestCase):
-
-#     def setUp(self):
-#         pass
-#         self.change = ChangeCalculator(ChangeAlgorithm.create(False))
-#         self.change.initialise(TestChange.default_float)
+        self.assertEqual({3:2}, algorithm.calculate_change({1:10, 3:2}, 6))
+        self.assertEqual({1:3, 3:1}, algorithm.calculate_change({1:10, 3:1}, 6))
+        self.assertEqual({3:2}, algorithm.calculate_change({1:10, 3:2, 4:2}, 6))
+        self.assertEqual({1:2, 4:1}, algorithm.calculate_change({1:10, 3:1, 4:2}, 6))
+        self.assertEqual({3:1, 65:2, 129:1}, algorithm.calculate_change({1:10, 3:10, 5:10, 9:10, 17:10, 33:10, 65:10, 129:10}, 262))
+        #self.assertEqual({}, algorithm.calculate_change({1:1, 3:10}, 5))
+        #self.assertEqual({}, algorithm.calculate_change({1:1, 3:1, 5:1, 9:1, 17:1, 33:1, 65:1, 129:1}, 262))

@@ -11,7 +11,7 @@ class ChangeCalculator:
         self.initialise({})
 
     def initialise(self, coins: Dict[int, int]):
-        self.coins = dict(sorted(coins.items(), reverse=False))
+        self.coins = self.change_algorithm.sort_coins(coins)
 
     def add_coins(self, coins: Dict[int, int]):
         self.coins = sum_coins(self.coins, coins)

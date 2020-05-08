@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections import defaultdict
 from typing import Dict, List
 
 from change_calculator.change import Change
@@ -21,17 +22,30 @@ class ChangeAlgorithm(ABC):
     def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
         pass
 
+    @abstractmethod
+    def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
+        pass
+
 
 class GreedyAlgorithm(ChangeAlgorithm):
 
     def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
-        change = []
-        for coin, coin_count in coins.items(): 
+        change_sum = 0
+        change = defaultdict(int)
+        for coin, coin_count in coins.items():             
             while coin_count and coin <= (amount - sum(change)):
-                change.append(coin)
+                print("coin", coin)
+                change[coin] += 1
+                change_sum += coin
                 coin_count -= 1
-                if sum(change) == amount: 
-                    break
+                if change_sum == amount: 
+                    return change
+        
+        return {}
+
+    def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
+        print("reversing")
+        return dict(sorted(coins.items(), reverse=True))
 
 
 class DynamicProgrammingAlgorithm(ChangeAlgorithm):
@@ -79,3 +93,6 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
 
         print_dp(self.dp)
         return self.dp[len(self.coins)-1][amount].coins
+
+    def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
+        return dict(sorted(coins.items(), reverse=False))

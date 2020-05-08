@@ -59,6 +59,8 @@ class TestChange(unittest.TestCase):
         # self.assertEqual([4], self.change.get_change(4))
         # self.assertEqual([4,1], self.change.get_change(5))
         self.assertEqual({1:2,4:1}, self.change.get_change(6))
+        self.change.add_coins({3:1})
+        self.assertEqual({3:2}, self.change.get_change(6))
         #self.assertEqual({100:1}, self.change.get_change(100))
         #self.assertEqual({1:1,100:1}, self.change.get_change(101))
     #     self.assertEqual([4,4], self.change.get_change(8))

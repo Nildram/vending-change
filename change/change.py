@@ -1,20 +1,27 @@
 from dataclasses import dataclass
 from typing import Dict, List
 
+def print_dp(dp):
+    for row in dp:
+        for col in row:
+            print("{:3.0f}, {}".format(col.number_of_coins, col.coins), end=" ")
+        print("\n")
+
+def sum_coins(existing_coins: Dict[int, int], additional_coins: Dict [int, int]) -> Dict[int, int]:
+    coins = {**existing_coins, **additional_coins}
+    for key, value in coins.items():
+        if key in existing_coins and key in additional_coins:
+            coins[key] = value + existing_coins[key]
+    return coins
+
 class Change:
 
     def __init__(self, coins: Dict[int, int]=None):
         self.coins = {} if coins == None else coins
         self.number_of_coins = sum(self.coins.values())
-        #self.number_of_coins = self.number_of_coins if self.number_of_coins else float('inf')
 
     def __add__(self, other):
-        coins = {**self.coins, **other.coins}
-        for key, value in coins.items():
-            if key in self.coins and key in other.coins:
-                coins[key] = value + self.coins[key]
-                    
-        return Change(coins)
+        return Change(sum_coins(self.coins, other.coins))
 
     def __eq__(self, other) -> bool:
         return self.number_of_coins == other.number_of_coins
@@ -35,7 +42,7 @@ class ChangeCalculator:
         self.coins = dict(sorted(coins.items(), reverse=False))
 
     def add_coins(self, coins: Dict[int, int]):
-        self.coins.update(coins)
+        self.coins = sum_coins(self.coins, coins)
 
     def get_change(self, amount: int) -> List[int]:
         return self.dynamic(amount)
@@ -50,13 +57,7 @@ class ChangeCalculator:
                     break
 
     def dynamic(self, amount: int) -> List[int]: 
-        dp = [[Change() for x in range(amount+1)] for x in range(len(self.coins))]
-
-        def print_dp(dp):
-            for row in dp:
-                for col in row:
-                    print("{:3.0f}, {}".format(col.number_of_coins, col.coins), end=" ")
-                print("\n")
+        dp = [[Change() for x in range(amount+1)] for x in range(len(self.coins))]        
 
         def out_of_current_coins(target_sum: int, coin: int, coin_count: int) -> bool:
             return int(target_sum/coin) > coin_count
@@ -87,7 +88,6 @@ class ChangeCalculator:
                 else:
                     #print(dp[coin_index][target_sum-coin] + Change({1:1}))
                     dp[coin_index][target_sum] = get_change_without_coin_limit(coin, dp, target_sum)
-                        
 
         print_dp(dp)
         return dp[len(self.coins)-1][amount].coins

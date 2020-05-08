@@ -16,10 +16,10 @@ class TestChange(unittest.TestCase):
     }
 
     non_canonical_float = {
-        1:20,
-        3:10,
-        4:10,
-        8:10,
+        1:6,
+        #3:10,
+        #4:10,
+        #8:10,
         #12:10,
         #13:10,
         #100:10,
@@ -56,7 +56,7 @@ class TestChange(unittest.TestCase):
         # self.assertEqual([3], self.change.get_change(3))
         # self.assertEqual([4], self.change.get_change(4))
         # self.assertEqual([4,1], self.change.get_change(5))
-        self.assertEqual([3,3], self.change.get_change(20))
+        self.assertEqual([3,3], self.change.get_change(6))
        # self.assertEqual([4,3], self.change.get_change(7))
     #     self.assertEqual([4,4], self.change.get_change(8))
     #     self.assertEqual([3,3,3], self.change.get_change(9))

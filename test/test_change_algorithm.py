@@ -45,5 +45,6 @@ class TestDynamicProgrammingAlgorithm(unittest.TestCase):
         self.assertEqual({3:2}, algorithm.calculate_change({1:10, 3:2, 4:2}, 6))
         self.assertEqual({1:2, 4:1}, algorithm.calculate_change({1:10, 3:1, 4:2}, 6))
         self.assertEqual({3:1, 65:2, 129:1}, algorithm.calculate_change({1:10, 3:10, 5:10, 9:10, 17:10, 33:10, 65:10, 129:10}, 262))
-        #self.assertEqual({}, algorithm.calculate_change({1:1, 3:10}, 5))
-        #self.assertEqual({}, algorithm.calculate_change({1:1, 3:1, 5:1, 9:1, 17:1, 33:1, 65:1, 129:1}, 262))
+        self.assertEqual({}, algorithm.calculate_change({1:1, 3:10}, 5))
+        self.assertEqual({1:1, 3:1, 5:1}, algorithm.calculate_change({1:1, 3:1, 5:1}, 9))
+        self.assertEqual({1: 1, 3: 1, 5: 1, 9: 1, 17: 1, 33: 1, 65: 1, 129: 1}, algorithm.calculate_change({1:1, 3:1, 5:1, 9:1, 17:1, 33:1, 65:1, 129:1}, 262))

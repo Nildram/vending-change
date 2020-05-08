@@ -63,8 +63,6 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
             self.dp[coin_index] = self.dp[coin_index-1].copy() if coin_index > 0 else self.dp[coin_index]
             for current_sum in range(coin, amount + 1):
-                #print(coin_index, coin, current_sum)
-                #print_dp(self.dp)
                 if self._out_of_current_coins(current_sum, coin, coin_count):
                     self.dp[coin_index][current_sum] = self._get_change_with_coin_limit(coin, coin_count, current_sum, coin_index)
                 else:
@@ -78,18 +76,17 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
         self.dp = [[Change() for x in range(amount+1)] for x in range(len(self.coins)+1)]
 
     def _out_of_current_coins(self, target_sum: int, coin: int, coin_count: int) -> bool:
-        return int(target_sum/coin) > coin_count
+        return target_sum/coin > coin_count
 
     def _get_change_with_coin_limit(self, coin: int, coin_count: int, target_sum: int, coin_index: int) -> Change:
-        change = Change()
-        if coin_index > 0:
-            change = self._max_change_using_current_coin(coin, coin_count) + \
-                self._remainder_using_previous_coin(coin, coin_count, target_sum, coin_index)
-        return change
+        change = self._max_change_using_current_coin(coin, coin_count) + \
+            self._remainder_using_previous_coin(coin, coin_count, target_sum, coin_index)
+        return Change() if change.total() < target_sum else change
 
     def _get_change_without_coin_limit(self, coin: int, target_sum: int, coin_index: int) -> Change:
-        return self._get_most_optimal_change(
+        change = self._get_most_optimal_change(
             self.dp[coin_index][target_sum], self.dp[coin_index][target_sum - coin] + Change({coin:1}))
+        return Change() if change.total() < target_sum else change
 
     def _max_change_using_current_coin(self, coin: int, coin_count: int) -> Change:
         return Change({coin: coin_count})

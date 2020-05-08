@@ -1,7 +1,7 @@
 from typing import Dict
 
 
-def sum_coins(existing_coins: Dict[int, int], additional_coins: Dict [int, int]) -> Dict[int, int]:
+def combine_coins(existing_coins: Dict[int, int], additional_coins: Dict [int, int]) -> Dict[int, int]:
     coins = {**existing_coins, **additional_coins}
     for key, value in coins.items():
         if key in existing_coins and key in additional_coins:
@@ -16,7 +16,7 @@ class Change:
         self.number_of_coins = sum(self.coins.values())
 
     def __add__(self, other):
-        return Change(sum_coins(self.coins, other.coins))
+        return Change(combine_coins(self.coins, other.coins))
 
     def __eq__(self, other) -> bool:
         return self.number_of_coins == other.number_of_coins
@@ -26,3 +26,6 @@ class Change:
 
     def __gt__(self, other) -> bool:
         return self.number_of_coins > other.number_of_coins
+
+    def total(self) -> int:
+        return sum(coin * count for coin, count in self.coins.items())

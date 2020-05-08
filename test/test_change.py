@@ -1,7 +1,7 @@
 import unittest
 
-from change.change_calculator import ChangeCalculator
-from change.change_algorithm import ChangeAlgorithm
+from change_calculator.change_calculator import ChangeCalculator
+from change_calculator.change_algorithm import ChangeAlgorithm
 
 class TestChange(unittest.TestCase):
 

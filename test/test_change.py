@@ -1,6 +1,7 @@
 import unittest
 
-from change.change import ChangeCalculator
+from change.change_calculator import ChangeCalculator
+from change.change_algorithm import ChangeAlgorithm
 
 class TestChange(unittest.TestCase):
 
@@ -28,7 +29,7 @@ class TestChange(unittest.TestCase):
     }
     def setUp(self):
         pass
-        self.change = ChangeCalculator()
+        self.change = ChangeCalculator(ChangeAlgorithm.create(False))
         self.change.initialise(TestChange.default_float)
 
     # def test_change(self):
@@ -50,9 +51,9 @@ class TestChange(unittest.TestCase):
 
 
     def test_change_2(self):
-        self.change = ChangeCalculator()
+        self.change = ChangeCalculator(ChangeAlgorithm.create(False))
         self.change.initialise(TestChange.non_canonical_float)
-        # self.assertEqual([], self.change.get_change(0))
+        self.assertEqual({}, self.change.get_change(0))
         # self.assertEqual([1], self.change.get_change(1))
         # self.assertEqual([1,1], self.change.get_change(2))
         # self.assertEqual([3], self.change.get_change(3))

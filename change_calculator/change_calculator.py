@@ -11,10 +11,12 @@ class ChangeCalculator:
         self.initialise({})
 
     def initialise(self, coins: Dict[int, int]):
+        # TODO check for negatives and throw?
         self.coins = self.change_algorithm.sort_coins(coins)
 
     def add_coins(self, coins: Dict[int, int]):
         self.coins = sum_coins(self.coins, coins)
 
     def get_change(self, amount: int) -> List[int]:
+        # TODO check for negative number and throw?
         return self.change_algorithm.calculate_change(self.coins, amount)

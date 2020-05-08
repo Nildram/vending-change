@@ -30,11 +30,11 @@ class ChangeAlgorithm(ABC):
 class GreedyAlgorithm(ChangeAlgorithm):
 
     def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
+        # TODO refactor
         change_sum = 0
         change = defaultdict(int)
         for coin, coin_count in coins.items():             
-            while coin_count and coin <= (amount - sum(change)):
-                print("coin", coin)
+            while coin_count and coin <= (amount - change_sum):
                 change[coin] += 1
                 change_sum += coin
                 coin_count -= 1
@@ -44,7 +44,6 @@ class GreedyAlgorithm(ChangeAlgorithm):
         return {}
 
     def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
-        print("reversing")
         return dict(sorted(coins.items(), reverse=True))
 
 

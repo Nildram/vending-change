@@ -17,7 +17,7 @@ class TestChange(unittest.TestCase):
 
     non_canonical_float = {
         1:6,
-        #3:10,
+        3:1,
         #4:10,
         #8:10,
         #12:10,

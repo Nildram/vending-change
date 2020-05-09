@@ -43,10 +43,15 @@ class ChangeAlgorithm(ABC):
     def calculate_coins(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
         """Calculate the coins that make up `amount` from `coins`.
 
+        Note: Coins should be sorted with the `sort_coins` method before
+        being passed into this method.
+
         Args:
             coins (dict) : Provides a limited set of coins to calculate the
                 `amount` with. The key represents the coin denomination and the
-                value represents the number of coins for that denomination.
+                value represents the number of coins for that denomination. Note
+                that coins should be sorted with the `sort_coins` method before
+                being passed into this method.
 
         Returns:
             dict: The set of coins that make up `amount`. The key represents
@@ -61,6 +66,16 @@ class ChangeAlgorithm(ABC):
 
     @abstractmethod
     def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
+        """Sort `coins` in the expected way for calculate_coins.
+
+        Args:
+            coins (dict) : Provides a limited set of coins to sort. The
+                key represents the coin denomination and the value
+                represents the number of coins for that denomination.
+
+        Returns:
+            dict: The sorted coins passed in as `coins`.
+        """
         pass
 
 

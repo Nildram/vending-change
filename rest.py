@@ -22,7 +22,7 @@ swagger_blueprint = get_swaggerui_blueprint(
 )
 app.register_blueprint(swagger_blueprint, url_prefix=swagger_url)
 
-calculator = Calculators.canonical()
+calculator = Calculators.non_canonical()
 
 parser = reqparse.RequestParser()
 parser.add_argument('coins', type=dict, location='json')

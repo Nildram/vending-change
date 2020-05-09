@@ -72,6 +72,10 @@ class ChangeCalculator:
             dict : The calculates change with key being the coin
                 denomination and the value being the number of coins
                 for that denomination.
+
+        Raises:
+            CalculationError: Raised when the requested amount cannot be
+                calculated from the given set of coins.
         """
         if amount < 0:
             raise NegativeChangeAmountError()

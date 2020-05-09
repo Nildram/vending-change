@@ -5,7 +5,7 @@ info:
   license:
     name: MIT
 paths:
-  /calculator/v1.0/initialise:
+  /change_calculator/v1.0/initialise:
     post:
       summary: Initialise the calculator with a collection of coins
       operationId: initialiseCalculator
@@ -27,7 +27,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /calculator/v1.0/add_coins:
+  /change_calculator/v1.0/add_coins:
     post:
       summary: Add more coins to the calculator
       operationId: addCoins
@@ -49,7 +49,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /calculator/v1.0/get_change/{amount}:
+  /change_calculator/v1.0/get_change/{amount}:
     get:
       summary: Info for a specific pet
       operationId: showPetById

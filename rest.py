@@ -69,9 +69,9 @@ class GetChange(Resource):
         return jsonify({'change': change})
 
 
-api.add_resource(Initialise, '/calculator/v1.0/initialise')
-api.add_resource(AddCoins, '/calculator/v1.0/add_coins')
-api.add_resource(GetChange, '/calculator/v1.0/get_change/<amount>')
+api.add_resource(Initialise, '/change_calculator/v1.0/initialise')
+api.add_resource(AddCoins, '/change_calculator/v1.0/add_coins')
+api.add_resource(GetChange, '/change_calculator/v1.0/get_change/<amount>')
 
 
 if __name__ == '__main__':

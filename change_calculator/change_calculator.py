@@ -79,7 +79,13 @@ class ChangeCalculator:
         """
         if amount < 0:
             raise NegativeChangeAmountError()
-        return self.change_algorithm.calculate_coins(self.coins, amount)
+        change = self.change_algorithm.calculate_coins(self.coins, amount)
+        self._remove_change(change)
+        return change
+
+    def _remove_change(self, change: Dict[int, int]):
+        for coin, count in change.items():
+            self.coins[coin] -= count
 
     def _validate_coins(self, coins: Dict[int, int]):
         for coin, count in coins.items():

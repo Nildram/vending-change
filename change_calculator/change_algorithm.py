@@ -125,8 +125,9 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
     def _do_calculation(self, amount):
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
             self.dp[coin_index % self.DP_ROWS] = self.dp[(coin_index-1) % self.DP_ROWS].copy()
-            for current_sum in range(coin, amount + 1):
-                self._update_dp_array(current_sum, coin, coin_count, coin_index)
+            if coin_count:
+                for current_sum in range(coin, amount + 1):
+                    self._update_dp_array(current_sum, coin, coin_count, coin_index)
         return self.dp[(len(self.coins)-1) % self.DP_ROWS][amount].coins if self.coins else {}
 
 

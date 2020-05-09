@@ -64,11 +64,12 @@ class TestChangeCalculator(unittest.TestCase):
             self.change_calculator.get_change(-1)
 
     def test_get_change(self):
-        coins = {1:1}
+        coins = {1:5, 2:10}
         self.change_calculator.initialise(coins)
-        self.algorithm.calculate_coins.return_value = {1:1}
+        self.algorithm.calculate_coins.return_value = {1:1, 2:2}
 
-        self.assertEqual({1:1}, self.change_calculator.get_change(1))
+        self.assertEqual({1:1, 2:2}, self.change_calculator.get_change(5))
         self.algorithm.calculate_coins.has_calls(
             [call(1)]
         )
+        self.assertEqual({1:4, 2:8}, self.change_calculator.coins)

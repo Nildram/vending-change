@@ -60,7 +60,7 @@ class ChangeCalculator:
         """
         self._validate_coins(coins)
         self.coins = combine_coins(self.coins, coins)
-        self.coins = self.change_algorithm.sort_coins(coins)
+        self.coins = self.change_algorithm.sort_coins(self.coins)
 
     def get_change(self, amount: int) -> List[int]:
         """Get the optimum change for `amount`.

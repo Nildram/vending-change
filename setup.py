@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="change_calculator", # Replace with your own username
-    version="0.0.1",
+    version="1.0.0",
     author="Jeremy Pollard",
     author_email="email.pollard@gmail.com",
     description="A component to calculate change from a given set of coins.",

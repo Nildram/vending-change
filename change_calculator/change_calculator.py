@@ -74,6 +74,8 @@ class ChangeCalculator:
                 for that denomination.
 
         Raises:
+            NegativeChangeAmountError: Raised when the requested amount
+                is negative.
             CalculationError: Raised when the requested amount cannot be
                 calculated from the given set of coins.
         """

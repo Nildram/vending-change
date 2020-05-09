@@ -1,0 +1,100 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Change Calculator
+  license:
+    name: MIT
+paths:
+  /calculator/v1.0/initialise:
+    post:
+      summary: Initialise the calculator with a collection of coins
+      operationId: initialiseCalculator
+      tags:
+        - calculator
+      requestBody:
+        description: A collection of coins to use as the initial float for the calculator
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coins'
+      responses:
+        '204':
+          description: Expected response to a valid request
+        '400':
+          description: Error processing request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /calculator/v1.0/add_coins:
+    post:
+      summary: Add more coins to the calculator
+      operationId: addCoins
+      tags:
+        - calculator
+      requestBody:
+        description: A collection of coins to add to the calculator
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coins'
+      responses:
+        '204':
+          description: Expected response to a valid request
+        '400':
+          description: Error processing request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /calculator/v1.0/get_change/{amount}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - calculator
+      parameters:
+        - name: amount
+          in: path
+          required: true
+          description: The amount of change to calculate
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Coins"
+        '400':
+          description: Unable to process request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    CoinData:
+      type: object
+      additionalProperties:
+        type: integer
+      example:
+        1: 50
+        2: 25
+        5: 25
+    Coins:
+      type: object
+      properties:
+        coins:
+          type: object
+          $ref: "#/components/schemas/CoinData"
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string

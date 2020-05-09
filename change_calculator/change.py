@@ -6,7 +6,6 @@ def combine_coins(existing_coins: Dict[int, int], additional_coins: Dict[int, in
     for key, value in coins.items():
         if key in existing_coins and key in additional_coins:
             coins[key] = value + existing_coins[key]
-
     return coins
 
 

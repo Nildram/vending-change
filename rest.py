@@ -6,10 +6,21 @@ from flask_restful import Api, Resource, reqparse
 
 from change_calculator import (CalculationError, Calculators,
                                NegativeCoinError, NegativeCountError)
-
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
 api = Api(app)
+
+swagger_url = '/swagger'
+api_url = '/static/swagger.yml'
+swagger_blueprint = get_swaggerui_blueprint(
+    swagger_url,
+    api_url,
+    config={
+        'app_name': "Change Calculator"
+    }
+)
+app.register_blueprint(swagger_blueprint, url_prefix=swagger_url)
 
 calculator = Calculators.canonical()
 
@@ -52,13 +63,15 @@ class GetChange(Resource):
         try:
             change = calculator.get_change(int(amount))
         except CalculationError:
-            abort(400, "Requested change amount is negative")
+            abort(400, "Requested change amount could no be calculated")
+        except CalculationError:
+            abort(400, "Requested change amount could no be calculated")
         return jsonify({'change': change})
 
 
-api.add_resource(Initialise, '/initialise')
-api.add_resource(AddCoins, '/add_coins')
-api.add_resource(GetChange, '/get_change/<amount>')
+api.add_resource(Initialise, '/calculator/v1.0/initialise')
+api.add_resource(AddCoins, '/calculator/v1.0/add_coins')
+api.add_resource(GetChange, '/calculator/v1.0/get_change/<amount>')
 
 
 if __name__ == '__main__':

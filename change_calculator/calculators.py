@@ -22,7 +22,7 @@ class ChangeCalculatorFactory:
         return ChangeCalculator(ChangeAlgorithm.create(self.canonical_coin_system))
 
 
-class ChangeCalculators:
+class Calculators:
     """Simple IoC container for new ChangeCalculator objects."""
 
     canonical = ChangeCalculatorFactory(canonical_coin_system=True)

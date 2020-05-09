@@ -54,6 +54,8 @@ class GreedyAlgorithm(ChangeAlgorithm):
 
 class DynamicProgrammingAlgorithm(ChangeAlgorithm):
 
+    DP_ROWS = 2
+
     def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
         return dict(sorted(coins.items(), reverse=False))
 
@@ -61,31 +63,40 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
         self._reset(coins, amount)
 
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
-            self.dp[coin_index] = self.dp[coin_index-1].copy() if coin_index > 0 else self.dp[coin_index]
+            self.dp[coin_index % self.DP_ROWS] = self.dp[(coin_index-1) % self.DP_ROWS].copy()
             for current_sum in range(coin, amount + 1):
-                if self._out_of_current_coins(current_sum, coin, coin_count):
-                    self.dp[coin_index][current_sum] = self._get_change_with_coin_limit(coin, coin_count, current_sum, coin_index)
-                else:
-                    self.dp[coin_index][current_sum] = self._get_change_without_coin_limit(coin, current_sum, coin_index)
+                self.update_dp_array(current_sum, coin, coin_count, coin_index)
 
-        #print_dp(self.dp)
-        return self.dp[len(self.coins)-1][amount].coins
+        # print_dp(self.dp)
+        return self.dp[(len(self.coins)-1) % self.DP_ROWS][amount].coins if self.coins else {}
+
+    def update_dp_array(self, target_sum: int, coin: int, coin_count: int, coin_index: int):
+        if self._out_of_current_coins(target_sum, coin, coin_count):
+            self.dp[coin_index % self.DP_ROWS][target_sum] = \
+                self._get_change_with_coin_limit(coin, coin_count, target_sum, coin_index)
+        else:
+            self.dp[coin_index % self.DP_ROWS][target_sum] = \
+                self._get_change_without_coin_limit(coin, target_sum, coin_index)
 
     def _reset(self, coins, amount):
         self.coins = coins
-        self.dp = [[Change() for x in range(amount+1)] for x in range(len(self.coins)+1)]
+        self.dp = [[Change() for x in range(amount+1)] for x in range(self.DP_ROWS)]
 
     def _out_of_current_coins(self, target_sum: int, coin: int, coin_count: int) -> bool:
         return target_sum/coin > coin_count
 
     def _get_change_with_coin_limit(self, coin: int, coin_count: int, target_sum: int, coin_index: int) -> Change:
+        # This could be optimised to check if the remainder is 0 and returning Change({})
+        # at that point rather than checking the sum after adding the current coin. the current solution
+        # reads clearer, I think. A similar optimisation could be used in _get_change_without_coin_limit.
         change = self._max_change_using_current_coin(coin, coin_count) + \
             self._remainder_using_previous_coin(coin, coin_count, target_sum, coin_index)
         return Change() if change.total() < target_sum else change
 
     def _get_change_without_coin_limit(self, coin: int, target_sum: int, coin_index: int) -> Change:
         change = self._get_most_optimal_change(
-            self.dp[coin_index][target_sum], self.dp[coin_index][target_sum - coin] + Change({coin:1}))
+            self.dp[coin_index % self.DP_ROWS][target_sum],
+            self.dp[coin_index % self.DP_ROWS][target_sum - coin] + Change({coin: 1}))
         return Change() if change.total() < target_sum else change
 
     def _max_change_using_current_coin(self, coin: int, coin_count: int) -> Change:
@@ -93,7 +104,7 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
 
     def _remainder_using_previous_coin(self, coin: int, coin_count: int, target_sum: int, coin_index: int) -> Change:
         remainder = target_sum - (coin * coin_count)
-        return self.dp[coin_index -1][remainder]
+        return self.dp[(coin_index - 1) % self.DP_ROWS][remainder]
 
     def _get_most_optimal_change(self, change1: Change, change2: Change) -> Change:
         return min(self._get_valid_change_options([change1, change2]))

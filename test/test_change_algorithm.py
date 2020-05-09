@@ -19,14 +19,6 @@ from change_calculator.change_algorithm import ChangeAlgorithm
 
 class TestDynamicProgrammingAlgorithm(unittest.TestCase):
 
-    # def generate_combinations(self):
-    #     d = [[1, 1], [0, 0]]
-    #     from itertools import permutations, chain
-    #     from pprint import pprint
-    #     pprint(sorted([i[:2], i[2:]] for i in set(permutations(chain.from_iterable(d)))))
-    #     for f in []:
-
-
     def test_cases(self):
         algorithm = ChangeAlgorithm.create(canonical_coin_system=False)
 

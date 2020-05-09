@@ -1,7 +1,7 @@
 from typing import Dict
 
 
-def combine_coins(existing_coins: Dict[int, int], additional_coins: Dict [int, int]) -> Dict[int, int]:
+def combine_coins(existing_coins: Dict[int, int], additional_coins: Dict[int, int]) -> Dict[int, int]:
     coins = {**existing_coins, **additional_coins}
     for key, value in coins.items():
         if key in existing_coins and key in additional_coins:
@@ -12,7 +12,7 @@ def combine_coins(existing_coins: Dict[int, int], additional_coins: Dict [int, i
 class Change:
 
     def __init__(self, coins: Dict[int, int]=None):
-        self.coins = {} if coins == None else coins
+        self.coins = {} if coins is None else coins
         self.number_of_coins = sum(self.coins.values())
 
     def __add__(self, other):

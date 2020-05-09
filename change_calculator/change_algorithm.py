@@ -3,6 +3,7 @@ from collections import defaultdict
 from typing import Dict, List
 
 from change_calculator.change import Change
+from change_calculator.exceptions import CalculationError
 
 
 def print_dp(dp):
@@ -13,13 +14,49 @@ def print_dp(dp):
 
 
 class ChangeAlgorithm(ABC):
+    """Calculates the coins that make up a specified.
+
+    Given a limited number of coins of various denominations,
+    the class will provide the optimum number of those coins
+    that make up a specifies sum.
+
+    The class also provides a simple static factory method for
+    creating new instances of it's subclasses.
+    """
 
     @staticmethod
     def create(canonical_coin_system: bool):
+        """Simple static factory method for creating instances.
+
+        Args:
+            canonical_coin_system (bool): Set to True if the coin
+                system being used is considered canonical, else False.
+
+        Returns:
+            ChangeAlgorithm: An instance of a ChangeAlgorithm class
+                that is optimum for calculating sums for the coin
+                system indicated by `canonical_coin_system`.
+        """
         return GreedyAlgorithm() if canonical_coin_system else DynamicProgrammingAlgorithm()
 
     @abstractmethod
-    def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
+    def calculate_coins(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
+        """Calculate the coins that make up `amount` from `coins`.
+
+        Args:
+            coins (dict) : Provides a limited set of coins to calculate the
+                `amount` with. The key represents the coin denomination and the
+                value represents the number of coins for that denomination.
+
+        Returns:
+            dict: The set of coins that make up `amount`. The key represents
+                the coin denomination and the value represents the number of
+                coins for that denomination.
+
+        Raises:
+            CalculationError: Raised when the requested amount cannot be
+                calculated from the given set of coins.
+        """
         pass
 
     @abstractmethod
@@ -32,7 +69,7 @@ class GreedyAlgorithm(ChangeAlgorithm):
     def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
         return dict(sorted(coins.items(), reverse=True))
 
-    def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
+    def calculate_coins(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
         self._reset()
         for coin, coin_count in coins.items():
             while coin_count and coin <= (amount - self.change_sum):
@@ -41,6 +78,8 @@ class GreedyAlgorithm(ChangeAlgorithm):
                     return self.change
                 coin_count -= 1
 
+        if amount != 0:
+            raise CalculationError()
         return {}
 
     def _reset(self):
@@ -59,18 +98,24 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
     def sort_coins(self, coins: Dict[int, int]) -> Dict[int, int]:
         return dict(sorted(coins.items(), reverse=False))
 
-    def calculate_change(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
+    def calculate_coins(self, coins: Dict[int, int], amount: int) -> Dict[int, int]:
         self._reset(coins, amount)
 
+        result = self._do_calculation(amount)
+        # print_dp(self.dp)
+        if result == {} and amount != 0:
+            raise CalculationError()
+        return result
+
+    def _do_calculation(self, amount):
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
             self.dp[coin_index % self.DP_ROWS] = self.dp[(coin_index-1) % self.DP_ROWS].copy()
             for current_sum in range(coin, amount + 1):
-                self.update_dp_array(current_sum, coin, coin_count, coin_index)
-
-        # print_dp(self.dp)
+                self._update_dp_array(current_sum, coin, coin_count, coin_index)
         return self.dp[(len(self.coins)-1) % self.DP_ROWS][amount].coins if self.coins else {}
 
-    def update_dp_array(self, target_sum: int, coin: int, coin_count: int, coin_index: int):
+
+    def _update_dp_array(self, target_sum: int, coin: int, coin_count: int, coin_index: int):
         if self._out_of_current_coins(target_sum, coin, coin_count):
             self.dp[coin_index % self.DP_ROWS][target_sum] = \
                 self._get_change_with_coin_limit(coin, coin_count, target_sum, coin_index)

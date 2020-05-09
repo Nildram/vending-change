@@ -2,19 +2,10 @@ from typing import Dict, List
 
 from change_calculator.change import Change, combine_coins
 from change_calculator.change_algorithm import ChangeAlgorithm
+from change_calculator.exceptions import (NegativeChangeAmountError,
+                                          NegativeCoinError,
+                                          NegativeCountError)
 
-
-class Error(Exception):
-    """Base class for all exceptions raised by this module."""
-
-class NegativeCoinError(Error):
-    """A coin with a negative value was found."""
-
-class NegativeCountError(Error):
-    """A coin count with a negative value was found."""
-
-class NegativeChangeAmountError(Error):
-    """The requested change amount was negative."""
 
 class ChangeCalculator:
 
@@ -69,6 +60,7 @@ class ChangeCalculator:
         """
         self._validate_coins(coins)
         self.coins = combine_coins(self.coins, coins)
+        self.coins = self.change_algorithm.sort_coins(coins)
 
     def get_change(self, amount: int) -> List[int]:
         """Get the optimum change for `amount`.
@@ -83,7 +75,7 @@ class ChangeCalculator:
         """
         if amount < 0:
             raise NegativeChangeAmountError()
-        return self.change_algorithm.calculate_change(self.coins, amount)
+        return self.change_algorithm.calculate_coins(self.coins, amount)
 
     def _validate_coins(self, coins: Dict[int, int]):
         for coin, count in coins.items():

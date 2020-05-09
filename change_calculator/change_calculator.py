@@ -3,6 +3,7 @@ from typing import Dict, List
 from change_calculator.change import Change, combine_coins
 from change_calculator.change_algorithm import ChangeAlgorithm
 
+
 class Error(Exception):
     """Base class for all exceptions raised by this module."""
 
@@ -16,18 +17,22 @@ class NegativeChangeAmountError(Error):
     """The requested change amount was negative."""
 
 class ChangeCalculator:
-    """Interface for calculating change for a specified amount.
-
-    This class provides a way to calculate change for a specified
-    amount, given a limited 'float' of existing coins.
-
-    An initial 'float' can be provided using the `initialise` method
-    and added to using the `add` method.
-
-    Change can be obtained using the `get_change` method.
-    """
 
     def __init__(self, change_algorithm: ChangeAlgorithm):
+        """Interface for calculating change for a specified amount.
+
+        This class provides a way to calculate change for a specified
+        amount, given a limited 'float' of existing coins.
+
+        An initial 'float' can be provided using the `initialise` method
+        and added to using the `add` method.
+
+        Change can be obtained using the `get_change` method.
+
+        Args:
+            change_algorithm (ChangeAlgorithm): The algorithm to use for
+                calculating the change.
+        """
         self.change_algorithm = change_algorithm
         self.initialise({})
 

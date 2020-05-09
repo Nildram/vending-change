@@ -6,5 +6,6 @@ The exported class ChangeCalculator provides the API interface
 for this module.
 """
 from .change_calculator import (ChangeCalculator, Error,
-                               NegativeChangeAmountError, NegativeCoinError,
-                               NegativeCountError)
+                                NegativeChangeAmountError, NegativeCoinError,
+                                NegativeCountError)
+from .change_calculators import ChangeCalculators

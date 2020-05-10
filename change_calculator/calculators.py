@@ -23,7 +23,16 @@ class ChangeCalculatorFactory:
 
 
 class Calculators:
-    """Simple IoC container for new ChangeCalculator objects."""
+    """Simple IoC container for creating new ChangeCalculator objects.
+
+    There are two types of ChangeCalculator that can be created:
+
+    canonical: Most efficient for canonical coin systems, but is
+        not recommended for non-canonical coin systems as it may
+        fail to calculate change for certain combinations of coins
+        and amount.
+    non_canonical: Recommended for non-canonical coin systems.
+    """
 
     canonical = ChangeCalculatorFactory(canonical_coin_system=True)
     non_canonical = ChangeCalculatorFactory(canonical_coin_system=False)

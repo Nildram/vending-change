@@ -4,6 +4,9 @@ info:
   title: Change Calculator
   license:
     name: MIT
+    url: "https://opensource.org/licenses/MIT"
+  contact:
+    email: "email.pollard@gmail.com"
 paths:
   /change_calculator/v1.0/initialise:
     post:

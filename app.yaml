@@ -1,0 +1,3 @@
+runtime: python37
+entrypoint: gunicorn -b :$PORT flask_app:app
+default_expiration: "1m"

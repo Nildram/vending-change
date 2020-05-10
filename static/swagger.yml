@@ -54,8 +54,8 @@ paths:
                 $ref: "#/components/schemas/Error"
   /change_calculator/v1.0/get_change/{amount}:
     get:
-      summary: Info for a specific pet
-      operationId: showPetById
+      summary: Calculate the change for specified amount
+      operationId: getChange
       tags:
         - calculator
       parameters:

@@ -63,7 +63,7 @@ class GetChange(Resource):
         try:
             change = calculator.get_change(int(amount))
         except CalculationError:
-            abort(400, "Requested change amount could no be calculated")
+            abort(400, "Requested change amount could not be calculated")
         except CalculationError:
             abort(400, "Requested change amount could no be calculated")
         return jsonify({'change': change})

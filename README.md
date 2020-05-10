@@ -154,3 +154,9 @@ there are more class and function level unit tests than there are integration te
 For a larger, more complex codebase with multiple components I would normally include
 BDD tests for higher level component and integration tests using an appropriate framework
 that supports gherkin syntax.
+
+### Documentation
+
+All classes include `docstrings` to document their public methods. A future improvement
+would be to generate more accessible documentation from these `docstrings` with a tool such
+as sphinx.

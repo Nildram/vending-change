@@ -47,7 +47,7 @@ class TestChangeCalculator(unittest.TestCase):
         self.algorithm.sort_coins.has_calls(
             [call({}), call(coins)]
         )
-        self.assertEqual(coins, self.change_calculator.coins)
+        self.assertEqual(coins, self.change_calculator._coins)
 
     def test_add_coins_to_coins(self):
         coins = {1:1}
@@ -57,7 +57,7 @@ class TestChangeCalculator(unittest.TestCase):
         self.algorithm.sort_coins.has_calls(
             [call(coins), call(coins)]
         )
-        self.assertEqual({1:2}, self.change_calculator.coins)
+        self.assertEqual({1:2}, self.change_calculator._coins)
 
     def test_get_change_with_negative_amount(self):
         with self.assertRaises(NegativeChangeAmountError):
@@ -72,4 +72,4 @@ class TestChangeCalculator(unittest.TestCase):
         self.algorithm.calculate_coins.has_calls(
             [call(1)]
         )
-        self.assertEqual({1:4, 2:8}, self.change_calculator.coins)
+        self.assertEqual({1:4, 2:8}, self.change_calculator._coins)

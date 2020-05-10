@@ -6,13 +6,6 @@ from change_calculator.change import Change
 from change_calculator.exceptions import CalculationError
 
 
-def print_dp(dp):
-    for row in dp:
-        for col in row:
-            print("{:3.0f}, {}".format(col.number_of_coins, col.coins), end=" ")
-        print("\n")
-
-
 class ChangeAlgorithm(ABC):
     """Calculates the coins that make up a specified.
 
@@ -117,10 +110,13 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
         self._reset(coins, amount)
 
         result = self._do_calculation(amount)
-        # print_dp(self.dp)
-        if result == {} and amount != 0:
+        if self._unable_to_calculate_change(amount, result):
             raise CalculationError()
         return result
+
+    def _reset(self, coins, amount):
+        self.coins = coins
+        self.dp = [[Change() for x in range(amount+1)] for x in range(self.DP_ROWS)]
 
     def _do_calculation(self, amount):
         for coin_index, (coin, coin_count) in enumerate(self.coins.items()):
@@ -130,6 +126,8 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
                     self._update_dp_array(current_sum, coin, coin_count, coin_index)
         return self.dp[(len(self.coins)-1) % self.DP_ROWS][amount].coins if self.coins else {}
 
+    def _unable_to_calculate_change(self, amount, result):
+        return result == {} and amount != 0
 
     def _update_dp_array(self, target_sum: int, coin: int, coin_count: int, coin_index: int):
         if self._out_of_current_coins(target_sum, coin, coin_count):
@@ -139,10 +137,6 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
             self.dp[coin_index % self.DP_ROWS][target_sum] = \
                 self._get_change_without_coin_limit(coin, target_sum, coin_index)
 
-    def _reset(self, coins, amount):
-        self.coins = coins
-        self.dp = [[Change() for x in range(amount+1)] for x in range(self.DP_ROWS)]
-
     def _out_of_current_coins(self, target_sum: int, coin: int, coin_count: int) -> bool:
         return target_sum/coin > coin_count
 
@@ -150,8 +144,10 @@ class DynamicProgrammingAlgorithm(ChangeAlgorithm):
         # This could be optimised to check if the remainder is 0 and returning Change({})
         # at that point rather than checking the sum after adding the current coin. the current solution
         # reads clearer, I think. A similar optimisation could be used in _get_change_without_coin_limit.
-        change = self._max_change_using_current_coin(coin, coin_count) + \
-            self._remainder_using_previous_coin(coin, coin_count, target_sum, coin_index)
+        change = self._get_most_optimal_change(
+            self.dp[coin_index % self.DP_ROWS][target_sum],
+            self._max_change_using_current_coin(coin, coin_count) + \
+                self._remainder_using_previous_coin(coin, coin_count, target_sum, coin_index))
         return Change() if change.total() < target_sum else change
 
     def _get_change_without_coin_limit(self, coin: int, target_sum: int, coin_index: int) -> Change:

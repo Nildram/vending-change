@@ -24,7 +24,7 @@ class ChangeCalculator:
             change_algorithm (ChangeAlgorithm): The algorithm to use for
                 calculating the change.
         """
-        self.change_algorithm = change_algorithm
+        self._change_algorithm = change_algorithm
         self.initialise({})
 
     def initialise(self, coins: Dict[int, int]):
@@ -42,7 +42,7 @@ class ChangeCalculator:
                 a negative value is found in `coins`.
         """
         self._validate_coins(coins)
-        self.coins = self.change_algorithm.sort_coins(coins)
+        self._coins = self._change_algorithm.sort_coins(coins)
 
     def add_coins(self, coins: Dict[int, int]):
         """Add coins to the current 'float'.
@@ -59,8 +59,8 @@ class ChangeCalculator:
                 a negative value is found in `coins`.
         """
         self._validate_coins(coins)
-        self.coins = combine_coins(self.coins, coins)
-        self.coins = self.change_algorithm.sort_coins(self.coins)
+        self._coins = combine_coins(self._coins, coins)
+        self._coins = self._change_algorithm.sort_coins(self._coins)
 
     def get_change(self, amount: int) -> List[int]:
         """Get the optimum change for `amount`.
@@ -81,13 +81,13 @@ class ChangeCalculator:
         """
         if amount < 0:
             raise NegativeChangeAmountError()
-        change = self.change_algorithm.calculate_coins(self.coins, amount)
+        change = self._change_algorithm.calculate_coins(self._coins, amount)
         self._remove_change(change)
         return change
 
     def _remove_change(self, change: Dict[int, int]):
         for coin, count in change.items():
-            self.coins[coin] -= count
+            self._coins[coin] -= count
 
     def _validate_coins(self, coins: Dict[int, int]):
         for coin, count in coins.items():

@@ -38,7 +38,8 @@ class ChangeCalculator:
         Args:
             coins (dict) : Provides the initial 'float' with key being the
                 coin denomination and the value being the number of coins
-                for that denomination.
+                for that denomination. There is currently a limit of
+                500000 for coin denominations and total float.
 
         Raises:
             NegativeCoinError: Raised when a coin with a negative value is
@@ -58,7 +59,8 @@ class ChangeCalculator:
         Args:
             coins (dict) : Provides the initial 'float' with key being the
                 coin denomination and the value being the number of coins
-                for that denomination.
+                for that denomination. There is currently a limit of
+                500000 for coin denominations and total float.
 
         Raises:
             NegativeCoinError: Raised when a coin with a negative value is
@@ -77,7 +79,8 @@ class ChangeCalculator:
         """Get the optimum change for `amount`.
 
         Args:
-            amount (int): The amount of change to calculate.
+            amount (int): The amount of change to calculate. There is
+                currently a limit of 500000 for change.
 
         Returns:
             dict : The calculates change with key being the coin

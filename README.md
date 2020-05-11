@@ -10,7 +10,7 @@ it to be accessed and tested from a browser. A version of the library can be fou
 [here](https://oracle-vending.nw.r.appspot.com/swagger/).**
 
 Note that there is a limit to both the coins denominations and change amount of between
-0 and 5000 (to account for the largest current UK denomination of a £50 note). There is also
+1 and 5000 (to account for the largest current UK denomination of a £50 note). There is also
 a limit on the float of maximum 10000 (£100). These upper limits are currently hard coded, but
 could be added as a configurable value (for example in the initialise API call). Coin counts
 must also be positive numbers.

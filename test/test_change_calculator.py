@@ -2,13 +2,9 @@ import unittest
 from unittest.mock import MagicMock, call
 
 from change_calculator.change_calculator import ChangeCalculator
-from change_calculator.exceptions import (CalculationError,
-                                          ChangeAmountTooLargeError,
-                                          CoinTooLargeError,
-                                          FloatTooLargeError,
-                                          NegativeChangeAmountError,
-                                          NegativeCoinError,
-                                          NegativeCountError)
+from change_calculator.exceptions import (CalculationError, FloatTooLargeError,
+                                          InvalidChangeAmountError,
+                                          InvalidCoinError, InvalidCountError)
 
 
 class TestChangeCalculator(unittest.TestCase):
@@ -26,11 +22,11 @@ class TestChangeCalculator(unittest.TestCase):
         self.algorithm.sort_coins.assert_called_with(coins)
 
     def test_initialise_with_negative_coin(self):
-        with self.assertRaises(NegativeCoinError):
+        with self.assertRaises(InvalidCoinError):
             self.change_calculator.initialise({-1: 1})
 
     def test_initialise_with_large_coin(self):
-        with self.assertRaises(CoinTooLargeError):
+        with self.assertRaises(InvalidCoinError):
             self.change_calculator.initialise({5001: 1})
 
     def test_initialise_with_large_float(self):
@@ -45,15 +41,15 @@ class TestChangeCalculator(unittest.TestCase):
             self.fail("initialise() raised FloatTooLargeError unexpectedly")
 
     def test_initialise_with_negative_count(self):
-        with self.assertRaises(NegativeCountError):
+        with self.assertRaises(InvalidCountError):
             self.change_calculator.initialise({1: -1})
 
     def test_add_with_negative_coin(self):
-        with self.assertRaises(NegativeCoinError):
+        with self.assertRaises(InvalidCoinError):
             self.change_calculator.add_coins({-1: 1})
 
     def test_add_with_large_coin(self):
-        with self.assertRaises(CoinTooLargeError):
+        with self.assertRaises(InvalidCoinError):
             self.change_calculator.add_coins({5001: 1})
 
     def test_add_with_large_float(self):
@@ -62,7 +58,7 @@ class TestChangeCalculator(unittest.TestCase):
             self.change_calculator.add_coins({1: 1})
 
     def test_add_with_negative_count(self):
-        with self.assertRaises(NegativeCountError):
+        with self.assertRaises(InvalidCountError):
             self.change_calculator.add_coins({1: -1})
 
     def test_add_empty_coins(self):
@@ -95,11 +91,11 @@ class TestChangeCalculator(unittest.TestCase):
         self.assertEqual({1: 2}, self.change_calculator._coins)
 
     def test_get_change_with_negative_amount(self):
-        with self.assertRaises(NegativeChangeAmountError):
+        with self.assertRaises(InvalidChangeAmountError):
             self.change_calculator.get_change(-1)
 
     def test_get_change_with_large_amount(self):
-        with self.assertRaises(ChangeAmountTooLargeError):
+        with self.assertRaises(InvalidChangeAmountError):
             self.change_calculator.get_change(5001)
 
     def test_get_change(self):

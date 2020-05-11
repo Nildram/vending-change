@@ -2,12 +2,9 @@ from typing import Dict, List
 
 from change_calculator.change import Change, combine_coins
 from change_calculator.change_algorithm import ChangeAlgorithm
-from change_calculator.exceptions import (ChangeAmountTooLargeError,
-                                          CoinTooLargeError,
-                                          FloatTooLargeError,
-                                          NegativeChangeAmountError,
-                                          NegativeCoinError,
-                                          NegativeCountError)
+from change_calculator.exceptions import (FloatTooLargeError,
+                                          InvalidChangeAmountError,
+                                          InvalidCoinError, InvalidCountError)
 
 
 class ChangeCalculator:
@@ -44,10 +41,8 @@ class ChangeCalculator:
                 5000 for coin denominations and 10000 for total float.
 
         Raises:
-            NegativeCoinError: Raised when a coin with a negative value is
-                found in `coins`.
-            CoinTooLargeError: Raised when a coin larger than accepted value
-                is found in `coins`.
+            InvalidCoinError: Raised when a coin with value <= 0 or > max
+                value is found in `coins`.
             NegativeCountError: Raised when the count for a coin contains
                 a negative value is found in `coins`.
         """
@@ -65,10 +60,8 @@ class ChangeCalculator:
                 50 for coin denominations and 5000 for total float.
 
         Raises:
-            NegativeCoinError: Raised when a coin with a negative value is
-                found in `coins`.
-            CoinTooLargeError: Raised when a coin larger than accepted value
-                is found in `coins`.
+            InvalidCoinError: Raised when a coin with value <= 0 or > max
+                value is found in `coins`.
             NegativeCountError: Raised when the count for a coin contains
                 a negative value is found in `coins`.
         """
@@ -90,10 +83,8 @@ class ChangeCalculator:
                 for that denomination.
 
         Raises:
-            NegativeChangeAmountError: Raised when the requested amount
-                is negative.
-            ChangeAmountTooLargeError: Raised if the requested amount
-                is too large.
+            InvalidCoinError: Raised when the requested amount
+                is negative or exceeds max coin value.
             CalculationError: Raised when the requested amount cannot be
                 calculated from the given set of coins.
         """
@@ -103,10 +94,8 @@ class ChangeCalculator:
         return change
 
     def _validate_change_amount(self, amount):
-        if amount < 0:
-            raise NegativeChangeAmountError()
-        elif amount > self.MAX_CHANGE_VALUE:
-            raise ChangeAmountTooLargeError()
+        if amount < 0 or amount > self.MAX_CHANGE_VALUE:
+            raise InvalidChangeAmountError()
 
     def _remove_change(self, change: Dict[int, int]):
         for coin, count in change.items():
@@ -114,12 +103,10 @@ class ChangeCalculator:
 
     def _validate_coins(self, coins: Dict[int, int]):
         for coin, count in coins.items():
-            if coin < 0:
-                raise NegativeCoinError()
-            elif coin > self.MAX_COIN_VALUE:
-                raise CoinTooLargeError()
+            if coin <= 0 or coin > self.MAX_COIN_VALUE:
+                raise InvalidCoinError()
             elif count < 0:
-                raise NegativeCountError()
+                raise InvalidCountError()
 
     def _validate_float(self, existing_coins, additional_coins):
         if self._sum_coins(existing_coins) + self._sum_coins(additional_coins) > self.MAX_FLOAT_VALUE:

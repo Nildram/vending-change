@@ -16,3 +16,15 @@ class NegativeChangeAmountError(Error):
 
 class CalculationError(Error):
     """The amount requested could not be calculated from the coins provided."""
+
+
+class ChangeAmountTooLargeError(Error):
+    """The requested change amount was too large."""
+
+
+class CoinTooLargeError(Error):
+    """A coin with a value too large was found."""
+
+
+class FloatTooLargeError(Error):
+    """The total 'float' is too large."""

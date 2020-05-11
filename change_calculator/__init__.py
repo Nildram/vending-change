@@ -7,5 +7,7 @@ for this module.
 """
 from .calculators import Calculators
 from .change_calculator import ChangeCalculator
-from .exceptions import (CalculationError, Error, NegativeChangeAmountError,
-                         NegativeCoinError, NegativeCountError)
+from .exceptions import (CalculationError, ChangeAmountTooLargeError,
+                         CoinTooLargeError, Error, FloatTooLargeError,
+                         NegativeChangeAmountError, NegativeCoinError,
+                         NegativeCountError)

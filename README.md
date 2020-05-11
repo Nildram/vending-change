@@ -9,6 +9,11 @@ amount of change from a given set of coins (the 'float').
 it to be accessed and tested from a browser. A version of the library can be found running
 [here](https://oracle-vending.nw.r.appspot.com/swagger/).**
 
+Note that there is a limit to the coins denominations, change amount and total 'float' of between
+0 and 500,000 (to account for the largest current worldwide denomination of 500,000 VND).
+The upper limit is currently hard coded, but could be added as a configurable value (for
+example in the initialise API call). Coin counts must also be positive numbers.
+
 ## How do I use the package?
 
 ### Installation from source
@@ -79,7 +84,7 @@ interact with the code.
 
 Requires the following pre-requisites:
 
-* `python3`
+* `python3 (minimum 3.6)`
 * `pip3`
 
 Once the pre-requisites are satisfied, install the necessary package dependencies

@@ -6,8 +6,9 @@ from flask_restful import Api, Resource, reqparse
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from change_calculator import (CalculationError, Calculators,
-                               NegativeChangeAmountError, NegativeCoinError,
-                               NegativeCountError)
+                               ChangeAmountTooLargeError, CoinTooLargeError,
+                               FloatTooLargeError, NegativeChangeAmountError,
+                               NegativeCoinError, NegativeCountError)
 
 app = Flask(__name__)
 api = Api(app)
@@ -43,7 +44,10 @@ def process_coin_data(processing_function):
         abort(400, "Coin data contains coins with negative values")
     except NegativeCountError:
         abort(400, "Coin data contains coins with negative values")
-
+    except CoinTooLargeError:
+        abort(400, "Coin data contains coins that are too large")
+    except FloatTooLargeError:
+        abort(400, "Coin data contains coins that will exceed the maximum 'float'")
 
 class Initialise(Resource):
     def post(self):
@@ -66,6 +70,8 @@ class GetChange(Resource):
             abort(404, "Requested change amount could not be calculated")
         except NegativeChangeAmountError:
             abort(400, "Requested amount is negative")
+        except ChangeAmountTooLargeError:
+            abort(400, "Requested amount is too large")
         return jsonify({'change': change})
 
 

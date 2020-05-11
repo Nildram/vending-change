@@ -12,7 +12,9 @@ from change_calculator.exceptions import (ChangeAmountTooLargeError,
 
 class ChangeCalculator:
 
-    MAX_COIN_VALUE = 500000
+    MAX_COIN_VALUE = 5000
+    MAX_FLOAT_VALUE = 10000
+    MAX_CHANGE_VALUE = 5000
 
     def __init__(self, change_algorithm: ChangeAlgorithm):
         """Interface for calculating change for a specified amount.
@@ -39,7 +41,7 @@ class ChangeCalculator:
             coins (dict) : Provides the initial 'float' with key being the
                 coin denomination and the value being the number of coins
                 for that denomination. There is currently a limit of
-                500000 for coin denominations and total float.
+                5000 for coin denominations and 10000 for total float.
 
         Raises:
             NegativeCoinError: Raised when a coin with a negative value is
@@ -60,7 +62,7 @@ class ChangeCalculator:
             coins (dict) : Provides the initial 'float' with key being the
                 coin denomination and the value being the number of coins
                 for that denomination. There is currently a limit of
-                500000 for coin denominations and total float.
+                50 for coin denominations and 5000 for total float.
 
         Raises:
             NegativeCoinError: Raised when a coin with a negative value is
@@ -80,7 +82,7 @@ class ChangeCalculator:
 
         Args:
             amount (int): The amount of change to calculate. There is
-                currently a limit of 500000 for change.
+                currently a limit of 5000 for change.
 
         Returns:
             dict : The calculates change with key being the coin
@@ -95,15 +97,15 @@ class ChangeCalculator:
             CalculationError: Raised when the requested amount cannot be
                 calculated from the given set of coins.
         """
-        self._validate_amount(amount)
+        self._validate_change_amount(amount)
         change = self._change_algorithm.calculate_coins(self._coins, amount)
         self._remove_change(change)
         return change
 
-    def _validate_amount(self, amount):
+    def _validate_change_amount(self, amount):
         if amount < 0:
             raise NegativeChangeAmountError()
-        elif amount > self.MAX_COIN_VALUE:
+        elif amount > self.MAX_CHANGE_VALUE:
             raise ChangeAmountTooLargeError()
 
     def _remove_change(self, change: Dict[int, int]):
@@ -120,7 +122,7 @@ class ChangeCalculator:
                 raise NegativeCountError()
 
     def _validate_float(self, existing_coins, additional_coins):
-        if self._sum_coins(existing_coins) + self._sum_coins(additional_coins) > self.MAX_COIN_VALUE:
+        if self._sum_coins(existing_coins) + self._sum_coins(additional_coins) > self.MAX_FLOAT_VALUE:
             raise FloatTooLargeError()
 
     def _sum_coins(self, coins: Dict[int, int]) -> int:

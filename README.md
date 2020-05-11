@@ -9,10 +9,11 @@ amount of change from a given set of coins (the 'float').
 it to be accessed and tested from a browser. A version of the library can be found running
 [here](https://oracle-vending.nw.r.appspot.com/swagger/).**
 
-Note that there is a limit to the coins denominations, change amount and total 'float' of between
-0 and 500,000 (to account for the largest current worldwide denomination of 500,000 VND).
-The upper limit is currently hard coded, but could be added as a configurable value (for
-example in the initialise API call). Coin counts must also be positive numbers.
+Note that there is a limit to both the coins denominations and change amount of between
+0 and 5000 (to account for the largest current UK denomination of a £50 note). There is also
+a limit on the float of maximum 10000 (£100). These upper limits are currently hard coded, but
+could be added as a configurable value (for example in the initialise API call). Coin counts
+must also be positive numbers.
 
 ## How do I use the package?
 
